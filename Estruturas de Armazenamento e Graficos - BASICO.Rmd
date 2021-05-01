@@ -1,0 +1,689 @@
+---
+title: "Estruturas de Armazenamento e Gráficos - BÁSICO"
+author: "Cleber Almeida Pereira"
+date: "30/04/2021"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+\newpage
+
+
+# Apresentação
+>A **linguagem R** é uma linguagem de programação utilizada para análises estatísticas e representação através de gráficos.
+
+>Este material foi desenvolvido utilizando o **RStudio** Version 1.3.1093, através da ferramenta **R Markdown**.
+
+>O **RStudio** facilita o uso da **linguagem R** através de uma interface gráfica para manipulação de dados, cálculos estatísticos e criação de gráficos. 
+
+>O intuito é apresentar algumas estruturas de armazenamento e usos básicos destas estruturas de um modo que pode ser aplicado em *Data Science* nos processos de análises de dados e representação gráfica destes.
+
+\newpage
+
+# Estruturas de Armazenamento
+>Nesta seção apresentaremos:
+
+- Vetor
+- Fator
+- Lista
+- Data frame
+- Matriz
+
+
+>Importante destacar que, diferente de outras linguagens de programação, em **R** o primeiro índice é **1** e não **0**.
+
+##  1. Vetor
+
+>Todos os elementos devem ser do mesmo tipo.
+
+>Criaremos 2 vetores, sendo o primeiro com nome de cidades e o segundo com siglas de unidades da federação (UF) das cidades criadas.
+
+### a. declarar um Vetor
+
+>Como exemplo vamos declarar um vetor com nome de quatro cidades do estado de Mato Grosso do Sul (BRASIL):
+
+>```{r}
+cidades <- c("Campo Grande", "Corumbá", "Ladário", "Miranda")
+cidades
+```  
+>>Na saída do código (**##**) são exibidos os valores do nosso vetor com índice máximo igual a 4, ou seja, contendo 4 elementos.
+
+### b. acessar valor pelo índice
+
+>```{r}
+cidades[3]
+```
+>```{r}
+cidades[0]
+```
+
+>>Note que, ao utilizar índice **0** nos foi retornada a informação do tipo de dado armazenado, no caso tipo *character*.  
+Assim, ao declar um vetor com números (ex: c(1,2,3,4)), ao acessar o índice **0** será obtido como retorno o tipo *numeric*.
+
+>```{r}
+cidades[5]
+```
+
+>> No exemplo acima, foi utilizado índice 5, no caso um índice inexistente, sendo apresentado saída com valor **NA** para indicar que não há resposta disponível.  
+**NA** significa *not applicable* (não aplicável ou não se aplica), *not available* (não disponível) ou *no answer* (sem resposta).
+
+### c. atualizar o valor de um índice existente
+
+>```{r}
+cidades[4] <- "Aquidauana"
+cidades
+```  
+>>Ao exibir os valores do vetor podemos observar que foi alterado o nome da cidade do índice 4, que antes era "Miranda" e agora é "Aquidauana".   
+
+### d. adicionar novo índice e atribuir um valor
+
+>```{r}
+cidades[5] <- "Miranda"
+cidades
+```  
+>>Foi adicionado o município "Miranda" no índice 5.  
+É preciso saber o tamanho do vetor para evitar atribuir valor a um índice já existente.  
+Outro erro que pode acontecer é informar um índice muito longe criando uma série de índices novos e fazendo com que o valor seja atribuído a todos os índices novos.  
+Utilizando o vetor **cidades** como exemplo, se ao invés de informar índice 5 o usuário tivéssemos informado índice 10, teríamos criados todos os índices inexistentes, ou seja, de 5 a 10 e atribuído o valor "Miranda" a cada um deles.
+
+### e. acessar um intervalo de valores
+
+>```{r}
+cidades[2:4]
+```  
+>>Na saída estão exibidos os nomes dos municípios dos índices do intervalo 2 a 4.
+
+### f. omitir um elemento do vetor
+
+>```{r}
+cidades[-4]
+```  
+>>Indicamos o índice que não queremos utilizando o sinal **-** antes do índice.  
+Observe que na saída não foi exibido o 4º elemento, "Aquidauana".
+
+### g. remover um elemento do vetor
+
+>```{r}
+cidades[6] <- "Whashington"
+cidades
+cidades <- cidades[-6]
+cidades
+```  
+>>Primeiro foi atribuído o nome da cidade "Whashington" ao índice 6 e na saída foram exibidos todos os elementos do vetor.  
+Para remover este último nome inserido, vamos utilizar uma técnica bem simples.  
+Vamos atribuir o próprio vetor exceto o índice indicado com sinal negativo **-** como vimos anteriormente.
+
+### h. limpar o vetor
+
+>```{r}
+cidades <- NULL # Limpa o vetor
+cidades
+```  
+>>Para limpar o vetor atribuímos o valor **NULL** (nulo).
+
+### i. declarando nosso segundo vetor (Sigla dos Estados)
+>Para as próximas estruturas precisaremos representar a sigla dos estados para cada município do vetor **cidades**, então vamos criar um vetor com as siglas:
+
+>```{r}
+estados.sigla <- c("MS", "MS", "MS", "MS", "MS", "MS")
+estados.sigla
+```  
+>>Note que todos os estados são iguais.  
+Se utilizarmos este vetor não poderemos apresentar um bom exemplo de análise por unidades da federação.  
+Então vamos precisar criar cidades de outros estados brasileiros para podermos ter um melhor exemplo durante a análise.  
+
+>>Para isso adicionamos um conteúdo *bônus* logo a seguir.
+
+## Bônus - Funções
+
+>Vamos aproveitar a necessidade de utilizarmos outros municípios e siglas de unidades da federação e, ao invés de inserirmos novos municípios vamos alterar o conteúdo dos vetores **cidades** e **estados.sigla** utilizando funções.  
+
+>Para isso vamos criar duas funções próprias para atribuir os novos valores.  
+São funções com exemplos simples com um certo teor de revisão.
+
+
+### Função: setar vetor *cidades*
+
+>```{r}
+set.vetor.cidades <- function(){
+  vetor_aux <- c("Campo Grande", "Cuiabá", "Curitiba", "Aquidauana")
+  vetor_aux[4] <- "São Paulo"
+  vetor_aux[5] <- "Miranda"
+  return(vetor_aux)
+}
+```  
+>>Acima foi declarada uma função que não recebe nenhum argumento.  
+Ela possui um vetor auxiliar que recebe os valores desejados e retorna este vetor quando solicitada.  
+Nela escrevemos três linhas de atribuição apena para "revisar" um pouco do que vimos até agora.  
+Observe que primeiro criamos um vetor com 4 cidades, depois alteramos o 4º elemento e, por fim atribuímos um 5º valor.
+
+>Utilizamos a função criada atribuindo o seu retorno (*vetor_aux*) ao vetor **cidades** chamando-a como a seguir:
+
+>```{r}
+cidades <- set.vetor.cidades()
+cidades
+```  
+>>Na saída apresentamos o novo conteúdo do vetor **cidades**.
+
+### Função: setar vetor *estados.sigla*
+
+>Agora precisamos alterar o conteúdo do vetor **estados.sigla** para que contenha os respectivos valores de UF para cada município do vetor **cidades**.  
+Para isso vamos criar uma função que altera aquele vetor.
+
+>```{r}
+set.vetor.estados.siglas <- function(){
+  vetor_aux <- c("MS", "MT", "PR", "SP", "MS")
+  return(vetor_aux)
+}
+```  
+>>Como temos cinco cidades atribuímos respectivamente as cinco siglas de seus respectivos Estados.
+
+>Assim como fizemos com o vetor **cidades** vamos chamar a função e alterar o conteúdo do vetor **estados.sigla**:
+
+>```{r}
+estados.sigla <- set.vetor.estados.siglas()
+estados.sigla
+```  
+>>Pronto, agora temos o registro de cinco cidades e suas respectivas unidades da federação.
+
+>Mais adiante utilizaremos estes vetores na seção **Data frames**  
+
+---
+
+## 2. Fator
+
+>Esta função é utilizada para iterar sobre um **vetor**.  
+Basicamente, ela possibilita expressar uma variável categórica.  
+
+>Como exemplo vamos usar a função sobre um vetor com siglas das Unidades da Federação e criar uma variável **UF** para armazenar a informação de Unidade da Federação de .
+
+### a. declarar um Fator
+
+>Como exemplo vamos usar a função sobre um vetor com siglas das Unidades da Federação.
+
+>```{r}
+siglas <- c("SP", "GO", "RS", "DF", "GO", "SP", "MS", "MT", "SP", "MS")
+UF <- as.factor(siglas)
+is.factor(UF)
+UF
+UF[1]
+str(UF)
+```  
+>>Primeiro criamos um vetor de siglas.  
+Na linha seguinte declaramos o fator **UF** utilizando a função *as.factor()*. Também poderíamos utilizar a função *factor()*.  
+Na terceira saída verificamos se **UF** é um fator.  
+Observe que na quarta saída os valores são apresentados em ordem alfabética, mas na terceira saída, quando indicamos o índice **1** o valor retornado é o original "SP" e não o primeiro valor ordenado "DF", portando não ocorre uma ordenação dos elementos, mas uma identificação da classificação de categorias.  
+Na última linha estão as informações sobre o fator.  
+Note que há uma representação ordinal para indicar a sequência dos registros lidos.  
+Assim, o número 1 refere-se a "DF" que foi a 1ª categoria identificada por ordem alfabética, o número 2 refere-se a "GO", o número 3 a "MS" e assim por diante, sendo apresentados na ordem de suas posições.
+
+---
+
+## 3. Lista
+
+>São estruturas muito úteis pois podem armazenar objetos de diversos tipos.  
+Deste modo, as listas podem ser criadas contendo objetos de outras classes.  
+
+
+### a. criar uma lista de vários objetos
+
+>Neste exemplo vamos criar uma lista contendo 2 vetores e um fator criados anteriormente.
+
+>```{r}
+lista <- list(cidades, estados.sigla, UF)
+lista
+str(lista)
+```  
+>>Na última saída estão sendo exibidos os tipos de cada elemento desta lista.
+
+### b. acessar um elemento da lista
+
+>Vamos tentar acessar os elementos da lista que criamos acima.
+
+>```{r}
+lista$cidades
+lista$estados.sigla
+lista$UF
+lista[1]
+```  
+>>Note que só foi possível acessar o valor através do índice da lista.  
+O cifrão (**$**) é utilizado para indicar um elemento da lista, mas neste caso os objetos passados são atribuídos a cada índice.  
+
+>Então vamos criar outra lista.  
+
+>```{r}
+pessoa <- list(nome="João",
+               sexo="M",
+               idade=42,
+               cidade="Campo Grande")
+pessoa
+str(pessoa)
+```  
+>>Esta é uma lista que contém informações sobre uma pessoa.  
+Na última saída estão sendo exibidas as informações sobre cada elemento.  
+A principal diferença é que estamos utilizando variáveis para indentificar cada elemento, com intuito de facilitar acessar seus valores.  
+Vamos tentar acessá-los.  
+
+>```{r}
+pessoa$nome
+pessoa[1]
+pessoa[[1]]
+pessoa["nome"]
+pessoa[["nome"]]
+```  
+>>Nos exemplos acima utilizamos três métodos diferentes:  
+
+>>- o **$** para indicar a variável identificadora;
+>>- o **índice**;
+>>- o **nome** da variável.
+
+>>Note que somente quando utilizamos duplo colchetes **[[ ]]** conseguiremos acessar um valor diretamente.  
+
+### c. filtar elementos de uma lista pela variável identificadora
+
+>```{r}
+pessoa[c('nome','idade')]
+pessoa[c('nome','idade')][["nome"]]
+pessoa[c('nome','idade')][["idade"]]
+```  
+>>Nos exemplos acima utilizamos um vetor com os parâmetros de filtro, no caso os nomes das variáveis. De modo simples estamos dizendo "filtre por nome e idade".   
+No primeiro exemplo é obtido uma lista contendo apenas os parâmetros solicitados.  
+Nos exemplos seguintes é informado qual é o argumento desejado para se acessar o valor. Também poderíamos ter informado o índice.  
+
+### d. lista de listas
+
+>Vamos criar uma lista de pessoas.  
+Para isso vamos criar mais duas pessoas:
+
+>```{r}
+pessoa2 <- list(nome="Maria",
+               sexo="F",
+               idade=22,
+               cidade="São Paulo")
+pessoa3 <- list(nome="Ana",
+                sexo="F",
+                idade=32,
+                cidade="Curitiba")
+```  
+
+> Agora vamos criar uma lista de pessoas e por fim vamos listar apenas os nomes delas.  
+
+>```{r}
+pessoas <- list(pessoa, pessoa2)
+pessoas[[3]] <- pessoa3
+for (p in pessoas){
+  print(p[["nome"]])
+}
+```  
+>>Neste exemplo utilizamos o **for** para iterar na lista.  
+Embora seja uma possibilidade, ao invés de criar uma lista de listas, como a que criamos para pessoas, recomendo o uso do **Data frame**.  
+
+>Então vamos criar uma lista de cidades com os vetores já criados anteriormente.
+
+>```{r}
+cidades.lista = list(cidade= cidades,
+                     uf = estados.sigla)
+cidades.lista
+```  
+>>Vamos utilizar esta lista na seção sobre **Data frames**.
+
+
+## 4. Data frame
+
+>O tipo **Data frame** pode ser considerado como a melhor forma para se armazenar dados para realização de uma análise.  
+Nele, cada linha é uma observação do conjunto de dados e cada coluna representa uma variável.  
+
+### a. Criar um data frame com lista
+
+>```{r}
+df.cidades <- data.frame(cidades.lista)
+df.cidades
+```  
+
+### b. Criar um data frame com vetores
+
+>```{r}
+dfA <- data.frame(cidades, estados.sigla)
+dfA
+dfA[1]
+dfA[2]
+```  
+>>A primeira saída apresenta o *Data frame* **dfA** com os valores dos vetores atribuídos.  
+Nas demais saídas acessamos cada um dos vetores pela sua posição.  
+
+>Outra forma de acessar os valores é pelo nome da coluna.  
+
+>```{r}
+dfA$cidades
+```  
+
+### c. Filtrar valores do data frame por fatiamento simples
+
+>```{r}
+dfA[1,2] 
+```  
+>>Obtemos o valor armazenado na linha **1** coluna **2**.
+
+>```{r}
+dfA[,1]
+```  
+>>Obtemos todas as linhas da primeira coluna  
+
+>```{r}
+dfA[1,]
+```  
+>>Na saída estão apresentados os valores da primeira linha de todas as colunas  
+
+### d. Filtrar valores do data frame por coordenadas com vedores
+
+>```{r}
+dfA[c(2:4), c(0,2)]
+```  
+>>No exemplo acima selecionamos os valores das linhas 2 a 4 apenas da última coluna,  
+Tal exemplo é mais usual quando temos 3 ou mais colunas.  
+
+>Então vamos alterar o Data Frame adicionando mais uma coluna.
+
+### e. Adicionar coluna
+
+>Primeiro vamos verificar os nomes das colunas.
+
+>```{r}
+names(dfA)
+```  
+
+>Agora vamos criar um vetor com os o tamanho da população para cada cidade e em seguida adicioná-lo ao **Data frame**.  
+
+>```{r}
+populacao <- c(1500, 2000, 1800, 12500, 300) 
+dfA[3] <- populacao
+#dfA[3]
+dfA
+```  
+>>Note que a coluna criada recebeu nome v3 que corresponde ao  tipo **Vetor** associado ao valor **3** informado.  
+Também poderíamos ter passado diretamente o nome "população".
+
+
+### f. Alterar o nome de uma coluna
+
+>Vamos alterar o nome das colunas pelos índices.  
+
+>```{r}
+names(dfA)[3] <- "População"
+dfA
+names(dfA)[1:2] <- c("Município", "UF") 
+dfA
+```  
+>>Primeiramente foi alterado o nome da coluna de índice **3**.  
+Em seguida foram alterados os nomes das colunas com índice **1** e **2**.  
+
+>Agora sim um bom exemplo de como podemos utilizar um filtro um pouco mais complexo.  
+
+>```{r}
+dfA[c(2:4), c(1,3)] 
+```  
+>>No exemplo acima selecionamos as linhas 2 a 4 apenas da 1ª e 3ª coluna.  
+
+### g. Outras funções e métodos úteis para trabalhar com Data frames
+
+>Verificar o número de linhas x colunas:
+>```{r}
+dim(dfA)
+```  
+>Verificar os tipos de dados:
+>```{r}
+str(dfA)
+str(dfA$Município)
+```  
+>>Na última saída verificamos o tipo de dados de uma coluna específica.
+
+>Acessar e obter valores de uma coluna:
+>```{r}
+dfA$cidades # Acessa uma coluna ...Se ela existir
+dfA$Município
+dfA["Município"]
+dfA$Município[1] 
+```  
+>>Na última saída foi acessado o 1º registro da coluna especificada.  
+
+
+### h. Filtrando com a função *filter()* dplyr
+
+>Quando informado um valor desejado de uma coluna é obtida a resposta se o valor informado está ou não em cada registro do **Data frame** .
+
+>```{r}
+cidade.MS <- dfA[['UF']] == "MS"
+cidade.MS
+```  
+>>Observe que foi retornado valor **TRUE** para o primeiro e último índice do **Data frame**, pois são municípios da Unidade da Federação **MS**.  
+
+>Uma forma de retornar os valores pelo parâmetro desejado é usando a função *filter()* do pacote **dplyr**.  
+O pacote dplyr é simples de usar e auxilia na manipulação de dados.
+
+>```{r, include=FALSE}
+library(dplyr)
+```
+>```{r}
+#library(dplyr)
+cidade.MS <- filter(dfA, dfA[['UF']] == "MS")
+cidade.MS
+```  
+>>Foi retornado um **Data frame** contendo apenas os registros desejados.  
+Foi importada a biblioteca **dplyr**, porém deixei comentado para não gerar o código no documento.
+
+---
+
+
+## 5. Matriz
+
+>Consiste em uma estrutura na qual cada elemento é indexado pelo índice da linha e pelo índice da coluna, assim como nas matrizes que estudamos em matemática.  
+Armazenam um único tipo de dado.  
+
+### a. Criar uma matriz
+
+>Como exemplo vamos criar matrizes (5x5) com valores de 1 a 25.
+
+>```{r}
+matrizA <- matrix(seq(1:25), nrow = 5)
+matrizA
+```  
+>>Observe que foi necessário definir o número de linhas.  
+Caso esta informação fosse omitida seria gerada uma matriz de uma só coluna linha a linha.  
+Ao invés de linhas também poderíamos ter definido o número de colunas.
+
+>```{r}
+matrizB <- matrix(seq(1:25),
+             ncol = 5,
+             byrow = TRUE,
+             dimnames = list(c(seq(1:5)),
+                             c('A','B','C','D','E')
+             )
+)
+matrizB
+```  
+>>Neste, diferente do exemplo anterior, foi definido o número de colunas em **ncol** = 5.  
+No argumento seguinte foi definido o parâmetro **byrow** para que os valores fossem inseridos em cada coluna linha a linha, de modo que só se inicia uma nova linha quando preencher o total de colunas passada como argumento.  
+Caso este parâmetro não fosse definido, os valores seriam indexados uma coluna inteira após a outra.  
+Outro parâmetro que foi definido foi o **dimnames** recebendo uma lista de dois elementos. O primeiro é um vetor com os valores que compõem os índices das linhas. O segundo elemento é um vetor com os índices das colunas.  
+
+### b. Filtrar matriz
+
+>Podemos filtrar a matriz da seguinte maneira:
+
+>```{r}
+matrizB[c(1:3), c("B","C")]
+```  
+>>No primeiro argumento definimos a seleção das linhas 1 a 3 e, no segundo argumento selecionamos apenas as colunas com índices "B" e "C".  
+
+
+\newpage
+# Gráficos
+
+>Para demostrar alguns modelos gráficos vamos utilizar o *Data frame* **dfA** declarado anteriormente.  
+
+>```{r}
+dfA
+```  
+
+### Informações sobre os valores do Data frame
+
+>```{r}
+summary(dfA$População)
+```  
+>>A função *summary()* é usada para retornar informações como média, mediana, valor mínimo e máximo.  
+
+\newpage
+## 1. Histograma
+
+>Vamos criar um **histograma** com os dados da coluna **População**.
+
+>```{r}
+hist(dfA$População, 
+     main="População", 
+     xlab="Eixo X", 
+     ylab="Eixo Y", 
+     col="grey",
+     breaks=10)
+```  
+
+\newpage
+## 2. Boxplot
+
+>```{r}
+boxplot(dfA$População)
+```  
+>>Note que na coluna **População** existem valores muito distantes da média,  então vamos utilizar a função *filter()* para remover tais valores apenas para demonstrar o uso desta função no caso de *outliers* (valores discrepantes).
+
+>```{r}
+dfB <- dfA %>%
+  filter(População <= 6000)
+```  
+
+>```{r}
+boxplot(dfB$População)
+```
+
+\newpage
+## 3. Table
+
+### a. verificando a quantidade de ocorrências para cada coluna
+
+>```{r}
+table(dfA$Município)
+table(dfA$UF)
+table(dfA$UF, exclude="PR")
+````  
+
+### b. quantidade de registros
+>```{r}
+length(table(dfA$Município))
+length(table(dfA$UF))
+```  
+
+### c. obter proporção das ocorrências pelo total de registros
+>```{r}
+prop.table(table(dfA$Município))
+prop.table(table(dfA$UF))
+prop.table(table(dfA$UF))*100
+```  
+>>Na última linha o valor foi convertido em percentual
+
+\newpage
+## 4. Gráfico de Barras
+
+>```{r, include=FALSE }
+library(ggplot2)
+```  
+>População por cidade  
+
+>```{r}
+#library(ggplot2)
+ggplot(dfA, aes(x=Município, y=População))+
+  geom_bar(stat='identity')
+```  
+>>Neste exemplo utilizamos a classe **gglplot** para criar o gráfico de barras.  
+
+>População por Unidade da Federação
+
+>```{r}
+ggplot(dfA, aes(x=UF, y=População))+
+  geom_bar(stat='identity')
+```  
+
+\newpage
+## 5. Gráfico de Barras Invertidas
+
+>```{r}
+ggplot(dfA, aes(x=Município, y=População))+
+  geom_bar(stat='identity')+
+  coord_flip() 
+```  
+>>O comando *coord_flip()* converte para barra invertida.  
+
+\newpage
+### a. adicionar rótulos de dados
+
+>```{r}
+ggplot(dfA, aes(x=Município, y=População))+
+  geom_bar(stat='identity')+
+  geom_text(aes(label=População))+
+  coord_flip()
+```  
+
+\newpage
+### b. Ajustar posição dos rótulos de dados
+
+>```{r}
+ggplot(dfA, aes(x=Município, y=População))+
+  geom_bar(stat='identity')+
+  geom_text(aes(label=População), hjust=0, vjust=0.3, size=3)+ 
+  coord_flip()
+```  
+
+\newpage
+### c. Formatando título, margens da área do gráfico e outras configurações
+
+>```{r}
+ggplot(dfA, aes(x=Município, y=População))+
+  ggtitle("População por Município")+
+  geom_bar(stat='identity')+
+  geom_text(aes(label=População), hjust=0.5, vjust=0.5, size=3, color="blue")+ 
+  coord_flip()+ # Muda para barra invertida
+  #theme(axis.title.x=element_text(vjust=-0.5))+
+  #theme(axis.title.y=element_text(angle=90, vjust=-0.5))+
+  theme(plot.margin = unit(c(0.3,0.2,0.2,0.5), "cm"))+
+  #theme(axis.line = element_line(arrow = arrow()))+
+  #theme(axis.line.x = element_line(arrow = arrow()))+
+  theme(axis.line.x = element_line(size=1.25))+
+  theme(plot.background=element_rect(color="black",
+                                     fill = "grey90"))
+```  
+
+\newpage
+### d. Formatando legenda
+
+>```{r}
+ggplot(dfA, aes(x=Município, y=População, size=População))+
+  ggtitle("População por Município")+
+  geom_bar(stat='identity')+
+  geom_text(aes(label=População), hjust=0.5, vjust=0.5, size=3, color="blue")+ 
+  coord_flip()+
+  theme(plot.background=element_rect(color="black",
+                                     fill = "grey90"))
+```  
+
+\newpage
+# Dicas
+
+##Acessar ajuda sobre pacotes no RStudio
+
+Na janela "*Source*" (local onde digitamos o código), você pode acessar ajuda sobre os pacotes utilizados neste projeto digitanto **?** seguido no nome do pacote, assim:
+
+- **?c** para vetor;
+- **?factor** para fator;
+
